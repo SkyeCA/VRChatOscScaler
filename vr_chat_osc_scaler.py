@@ -16,7 +16,7 @@ TIMEOUT_SECONDS = 5.0
 class VRChatEyeHeightApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("VRChat Eye Height Controller")
+        self.root.title("VRChat OSC Scaler")
         self.root.geometry("380x280")
         self.root.resizable(False, False)
 
