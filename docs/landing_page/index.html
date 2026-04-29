@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VRChatOscScaler</title>
+    <style>
+        :root {
+            --bg-color: #121418;
+            --surface-color: #1e2128;
+            --primary-color: #4da6ff;
+            --text-main: #e0e0e0;
+            --text-muted: #9ba1a6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 0;
+            background: linear-gradient(90deg, #4da6ff, #b366ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        .hero-section {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            background-color: var(--surface-color);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-content h2 {
+            margin-top: 0;
+            font-size: 1.8rem;
+        }
+
+        .features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .features li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .features li::before {
+            content: "✓";
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background-color: #3390ff;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--text-muted);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                flex-direction: column;
+            }
+            .cta-buttons {
+                flex-direction: column;
+            }
+            .btn {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>VRChatOscScaler</h1>
+        </header>
+
+        <main class="hero-section">
+            <div class="hero-content">
+                <h2>Smooth & Instant Scaling</h2>
+                <p>VRChatOscScaler is a lightweight desktop utility that communicates directly with VRChat via OSC. Easily adjust your avatar height without modifying your existing avatars.</p>
+                
+                <ul class="features">
+                    <li><strong>Set Instantly:</strong> Snap to an exact height with a single click.</li>
+                    <li><strong>Smooth Transitions:</strong> Gracefully transition to your target height over a custom duration for a better in-game aesthetic.</li>
+                    <li><strong>Live Feedback:</strong> Automatically reads and displays your current in-game height and avatar scaling permissions.</li>
+                    <li><strong>Free:</strong> I'm not asking for money.</li>
+                </ul>
+
+                <div class="cta-buttons">
+                    <a href="https://github.com/SkyeCA/VRChatOscScaler/releases" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Download Latest Release</a>
+                    <a href="https://github.com/SkyeCA/VRChatOscScaler" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">View Source on GitHub</a>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <img src="screenshot.png" alt="VRChatOscScaler Application Interface showing target height, duration, and connection status">
+            </div>
+        </main>
+
+        <footer>
+            <p>VRChatOscScaler is not affiliated with VRChat.</p>
+            <p><a href="https://vore.my">Created by SkyeCA</a></p>
+        </footer>
+    </div>
+
+</body>
+</html>

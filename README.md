@@ -2,7 +2,7 @@
 
 A simple graphical application written in Python for setting avatar scaling (height) in VRChat via OSC.
 
-![Screenshot of the program running](/resources/screenshot.png)
+![Screenshot of the program running](docs/landing_page/screenshot.png)
 
 
 ## Downloads 
