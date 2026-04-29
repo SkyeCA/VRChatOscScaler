@@ -15,7 +15,7 @@ TIMEOUT_SECONDS = 5.0       # How long without data before we assume VRC is disc
 class VRChatEyeHeightApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("VRChat Eye Height Controller")
+        self.root.title("VRChat OSC Scaler")
         self.root.geometry("380x200") # Slightly smaller window since we removed a label
         self.root.resizable(False, False)
 
