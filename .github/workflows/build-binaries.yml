@@ -1,0 +1,142 @@
+# .github/workflows/build.yml
+name: Build CX_Freeze Binaries
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # ← opt into Node 24 now
+
+permissions:
+  contents: write
+  
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact-name: OpenVRCScaler
+            output-ext: ".AppImage"
+          - os: windows-latest
+            artifact-name: OpenVRCScaler
+            output-ext: ".msi"
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout main repo
+        uses: actions/checkout@v4
+
+      # --- Python +  CX_Freeze ---
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          pip install -r requirements.txt
+          pip install cx_Freeze freeze-core Nuitka pyinstaller
+
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          pip install -r requirements.txt
+          pip install cx_Freeze freeze-core
+      ##needed if adding a systemtray icon
+      #- name: Set up virtual display (Linux)
+        #if: runner.os == 'Linux'
+        #run: |
+        #  sudo apt-get install -y xvfb
+        #  Xvfb :99 -screen 0 1024x768x24 &
+        #  echo "DISPLAY=:99" >> $GITHUB_ENV
+
+      # --- Build CX_Freeze ---
+      - name: Build with CX_Freeze (Linux)
+        if: runner.os == 'Linux'
+        ##needed if systray icon is added
+        #env:
+          #DISPLAY: ':99'
+        run: |
+          python setup.py bdist_appimage
+        
+      - name: Build with CX_Freeze (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          python setup.py bdist_msi
+
+      # --- Build pyinstaller ---
+
+      - name: Build with pyinstaller (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          pyinstaller ^
+          --noconfirm ^
+          --onefile ^
+          --windowed ^
+          --name OpenVRCScaler-pyinstaller.exe ^
+          --icon "open_vrc_scaler_icon.ico" ^
+          "open_vrc_scaler.py"
+
+      # --- Build Nuitka ---
+      - name: Build with Nuitka (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          nuitka ^
+          --assume-yes-for-downloads ^
+          --windows-console-mode=disable ^
+          --windows-icon-from-ico=open_vrc_scaler_icon.ico ^
+          --output-filename=OpenVRCScaler-nuitka.exe ^
+          --enable-plugin=tk-inter ^
+          --output-dir=dist ^
+          --mode=onefile ^
+          open_vrc_scaler.py
+
+      # --- Upload ---
+      - name: Upload binary
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: dist/OpenVRCScaler${{ matrix.output-ext }}
+          retention-days: 30
+
+      - name: Upload PyInstaller artifact (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ matrix.artifact-name }}-pyinstaller
+          path: dist/OpenVRCScaler-pyinstaller.exe
+          retention-days: 30
+
+      - name: Upload Nuitka artifact (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ matrix.artifact-name }}-nuitka
+          path: dist/OpenVRCScaler-nuitka.exe
+          retention-days: 30
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/OpenVRCScaler${{ matrix.output-ext }}
+
+      - name: Upload PyInstaller build to Release (Windows)
+        if: runner.os == 'Windows'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/OpenVRCScaler-pyinstaller.exe
+
+      - name: Upload Nuitka build to Release (Windows)
+        if: runner.os == 'Windows'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/OpenVRCScaler-nuitka.exe
